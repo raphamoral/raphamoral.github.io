@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raphael Moral Piazera · Senior Software Engineer</title>
+<meta name="description" content="Senior Software Engineer — Python backend, React frontend, AWS, AI systems. Builder of Ratchet, an AI bug-investigation platform.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Tema único e deliberado: HUD escuro. */
+  :root {
+    --void: #060A11;
+    --panel: rgba(13, 21, 33, 0.72);
+    --panel-solid: #0D1521;
+    --ink: #D9E4EF;
+    --ink-soft: #93A5B5;
+    --ink-faint: #5A6C7C;
+    --line: #1D2A3A;
+    --cyan: #7DF4E4;
+    --cyan-dim: rgba(125, 244, 228, 0.14);
+    --signal: #FF8A5C;
+    --glow: 0 0 24px rgba(125, 244, 228, 0.18);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--void); color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.65;
+    overflow-x: hidden;
+  }
+  #field { position: fixed; inset: 0; z-index: 0; opacity: .55; }
+  .shell { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-shadow: 0 0 10px rgba(125,244,228,.6); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+  ::selection { background: var(--cyan); color: #06251F; }
+
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .display { font-family: "Chakra Petch", "IBM Plex Sans", sans-serif; }
+
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 0; font-family: "IBM Plex Mono", monospace; font-size: 13px;
+  }
+  .sig { color: var(--ink-soft); letter-spacing: .08em; }
+  .sig b { color: var(--cyan); font-weight: 500; }
+  #lang-toggle {
+    background: transparent; color: var(--ink-soft); border: 1px solid var(--line);
+    padding: 6px 14px; font-family: inherit; font-size: 12.5px; cursor: pointer;
+    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  }
+  #lang-toggle:hover { color: var(--cyan); border-color: var(--cyan); }
+
+  /* ---------- HERO ---------- */
+  .hero { padding: 56px 0 64px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+  @media (max-width: 720px) { .hero { grid-template-columns: 1fr; } .hero .portrait { order: -1; justify-self: start; } }
+  .bootline {
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink-faint);
+    margin-bottom: 18px; letter-spacing: .04em; min-height: 1.4em; white-space: nowrap; overflow: hidden;
+  }
+  .bootline .ok { color: var(--cyan); }
+  .bootline .caret { display: inline-block; width: 8px; background: var(--cyan); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  h1 {
+    font-family: "Chakra Petch", sans-serif; font-weight: 700;
+    font-size: clamp(32px, 5.6vw, 52px); letter-spacing: -0.01em; line-height: 1.08;
+    margin: 0 0 16px; text-wrap: balance; text-transform: uppercase;
+  }
+  h1 .hl { color: var(--cyan); text-shadow: 0 0 30px rgba(125,244,228,.35); }
+  .lead { font-size: 18px; color: var(--ink-soft); max-width: 56ch; margin: 0 0 28px; }
+  .lead strong { color: var(--ink); font-weight: 600; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-block; padding: 11px 22px; font-family: "Chakra Petch", sans-serif;
+    font-weight: 600; font-size: 14px; letter-spacing: .06em; text-transform: uppercase;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  }
+  .btn-primary { background: var(--cyan); color: #052620; }
+  .btn-primary:hover { text-shadow: none; box-shadow: var(--glow); }
+  .btn-ghost { border: 1px solid var(--line); color: var(--ink); background: var(--panel); }
+  .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); text-shadow: none; }
+
+  .portrait { position: relative; width: 208px; height: 208px; }
+  .portrait img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+    filter: saturate(.9) contrast(1.04);
+  }
+  .portrait::before {
+    content: ""; position: absolute; inset: -10px; z-index: -1;
+    clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+    background: linear-gradient(135deg, rgba(125,244,228,.5), transparent 40%, transparent 60%, rgba(255,138,92,.4));
+    animation: pulse 4s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: .5; } }
+  .portrait .tag-id {
+    position: absolute; left: 0; bottom: -26px; font-family: "IBM Plex Mono", monospace;
+    font-size: 11px; color: var(--ink-faint); letter-spacing: .12em;
+  }
+  .portrait .tag-id b { color: var(--signal); font-weight: 500; }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 46px 0; }
+  h2 {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint);
+    margin: 0 0 26px; display: flex; align-items: center; gap: 14px;
+  }
+  h2::before { content: "▮"; color: var(--cyan); font-size: 11px; }
+  h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+
+  /* HUD frame cards */
+  .frame {
+    position: relative; background: var(--panel); backdrop-filter: blur(6px);
+    border: 1px solid var(--line); padding: 26px 28px; transition: border-color .25s, box-shadow .25s;
+  }
+  .frame::before, .frame::after {
+    content: ""; position: absolute; width: 18px; height: 18px; pointer-events: none;
+    border-color: var(--cyan); border-style: solid;
+  }
+  .frame::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .frame::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+  .frame:hover { border-color: rgba(125,244,228,.45); box-shadow: var(--glow); }
+
+  .projects { display: grid; gap: 18px; }
+  .project h3 { font-family: "Chakra Petch", sans-serif; margin: 0 0 2px; font-size: 21px; font-weight: 600; letter-spacing: .01em; }
+  .project .role { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--signal); margin-bottom: 12px; letter-spacing: .06em; }
+  .project p { margin: 0 0 14px; color: var(--ink-soft); max-width: 68ch; font-size: 15.5px; }
+  .project p strong { color: var(--ink); }
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+  .tag {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--cyan);
+    background: var(--cyan-dim); border: 1px solid rgba(125,244,228,.25); padding: 3px 9px;
+    clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+  }
+  .project a.more { font-family: "IBM Plex Mono", monospace; font-size: 13.5px; }
+
+  .xp { display: grid; gap: 0; }
+  .job {
+    display: grid; grid-template-columns: 150px 1fr; gap: 20px;
+    padding: 20px 0; border-bottom: 1px solid var(--line);
+  }
+  .job:last-child { border-bottom: 0; }
+  .job .when {
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink-faint);
+    padding-top: 4px; font-variant-numeric: tabular-nums; letter-spacing: .05em;
+  }
+  .job .when::before { content: "▸ "; color: var(--cyan); }
+  .job h3 { margin: 0; font-family: "Chakra Petch", sans-serif; font-size: 16.5px; font-weight: 600; }
+  .job .co { color: var(--ink-soft); font-weight: 400; font-family: "IBM Plex Sans", sans-serif; }
+  .job p { margin: 6px 0 0; font-size: 14.5px; color: var(--ink-soft); max-width: 64ch; }
+  @media (max-width: 620px) { .job { grid-template-columns: 1fr; gap: 4px; } }
+
+  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .skill-group h3 {
+    margin: 0 0 8px; font-size: 12px; font-family: "IBM Plex Mono", monospace;
+    color: var(--signal); font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+  }
+  .skill-group p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.75; font-family: "IBM Plex Mono", monospace; }
+
+  .about p { color: var(--ink-soft); max-width: 66ch; margin: 0; }
+
+  footer { padding: 40px 0 60px; border-top: 1px solid var(--line); margin-top: 30px; }
+  .statusbar {
+    display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: center;
+    font-family: "IBM Plex Mono", monospace; font-size: 13px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); display: inline-block; margin-right: 8px; animation: blink 2.4s ease infinite; }
+  .fine { margin-top: 22px; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-faint); letter-spacing: .08em; }
+
+  /* ---------- RMP-AI terminal ---------- */
+  .term { padding: 0; overflow: hidden; }
+  .term-head {
+    padding: 10px 16px; font-size: 12px; letter-spacing: .1em; color: var(--ink-soft);
+    border-bottom: 1px solid var(--line); background: rgba(125,244,228,.04); text-transform: uppercase;
+  }
+  .term-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 8px var(--signal); margin-right: 6px; }
+  .term-out {
+    min-height: 180px; max-height: 320px; overflow-y: auto; padding: 16px 18px;
+    font-size: 13.5px; line-height: 1.7; white-space: pre-wrap; word-wrap: break-word;
+  }
+  .term-out .u { color: var(--signal); }
+  .term-out .a { color: var(--ink); }
+  .term-out .sys { color: var(--ink-faint); font-style: italic; }
+  .term-out a { color: var(--cyan); }
+  .term-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 18px 12px; }
+  .chip {
+    background: transparent; border: 1px solid var(--line); color: var(--ink-soft);
+    font-size: 11.5px; padding: 4px 11px; cursor: pointer;
+    clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+  }
+  .chip:hover { color: var(--cyan); border-color: var(--cyan); }
+  .term-in { display: flex; gap: 10px; align-items: center; padding: 12px 18px; border-top: 1px solid var(--line); }
+  .term-in input {
+    flex: 1; background: transparent; border: 0; outline: 0; color: var(--ink);
+    font-size: 14px; caret-color: var(--cyan);
+  }
+  .term-in input::placeholder { color: var(--ink-faint); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bootline .caret, .dot, .portrait::before { animation: none; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    section, .hero { animation: rise .55s ease both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  }
+</style>
+</head>
+<body>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="shell">
+
+  <nav>
+    <span class="sig"><b>[RMP]</b> · raphael.moral</span>
+    <button id="lang-toggle" aria-pressed="false" title="Mudar idioma / Switch language">PT</button>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <div class="bootline" id="bootline" aria-hidden="true"></div>
+      <h1 data-en='Backends that <span class="hl">survive</span> production.' data-pt='Backends que <span class="hl">sobrevivem</span> à produção.'></h1>
+      <p class="lead"
+         data-en="Senior Software Engineer, backend at the core — six years shipping Python services: payments at high-volume fintechs, distributed queues, async pipelines — plus React frontends and, lately, <strong>multi-tenant AI systems</strong> I design, deploy and operate end-to-end."
+         data-pt="Engenheiro de Software Sênior, backend no núcleo — seis anos entregando serviços em Python: pagamentos em fintech de alto volume, filas distribuídas, pipelines assíncronos — além de frontends React e, recentemente, <strong>sistemas de IA multi-tenant</strong> que projeto, deployo e opero de ponta a ponta."></p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://calendly.com/raphamoraleng/30min" data-en="Book a 30-min call" data-pt="Agende 30 min"></a>
+        <a class="btn btn-ghost" href="mailto:raphamoraleng@gmail.com" data-en="Email" data-pt="Email"></a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/raphaelmoral/" rel="me">LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/raphamoral" rel="me">GitHub</a>
+      </div>
+    </div>
+    <div class="portrait">
+      <img src="assets/avatar.png" alt="Raphael Moral Piazera" width="208" height="208">
+      <span class="tag-id">ID <b>RMP-SP</b> · SÃO PAULO / BR</span>
+    </div>
+  </header>
+
+  <section id="career">
+    <h2 data-en="career summary" data-pt="resumo de carreira"></h2>
+    <div class="frame about">
+      <p data-en="I started in mechatronics engineering, integrating Python with physical equipment — where I learned that software failing has consequences you can touch. That pulled me into backend work: six years and seven companies later, I've built REST APIs and distributed services for consultancies, healthtech, tire manufacturing, and — most recently — high-volume fintech, where I owned payment and transaction services as a senior engineer. Along the way I became the person teams call when production is on fire: log-diving, hypothesis testing, stabilizing. In 2026 I turned that skill into a product, designing and operating Ratchet — a multi-tenant SaaS where AI investigates bugs the way I would. My trajectory in one line: from making machines work, to making systems reliable, to teaching AI to do the investigation itself."
+         data-pt="Comecei na engenharia mecatrônica, integrando Python com equipamentos físicos — onde aprendi que software falhando tem consequência que se toca. Isso me puxou pro backend: seis anos e sete empresas depois, construí APIs REST e serviços distribuídos pra consultorias, healthtech, indústria e — mais recentemente — fintech de alto volume, onde fui dono de serviços de pagamento e transações como engenheiro sênior. No caminho, virei a pessoa que os times chamam quando a produção pega fogo: mergulho em log, teste de hipótese, estabilização. Em 2026 transformei essa habilidade em produto, projetando e operando o Ratchet — um SaaS multi-tenant onde a IA investiga bugs do jeito que eu investigaria. Minha trajetória em uma linha: de fazer máquinas funcionarem, a fazer sistemas confiáveis, a ensinar a IA a investigar sozinha."></p>
+    </div>
+  </section>
+
+  <section id="ai">
+    <h2 data-en="ask the terminal" data-pt="pergunte ao terminal"></h2>
+    <div class="frame term" id="term">
+      <div class="term-head mono">
+        <span class="term-dot"></span> RMP-AI · <span data-en="candidate intelligence interface" data-pt="interface de inteligência do candidato"></span>
+      </div>
+      <div class="term-out mono" id="term-out" aria-live="polite"></div>
+      <div class="term-chips" id="term-chips">
+        <button class="chip mono" data-q-en="who is raphael?" data-q-pt="quem é o raphael?" data-en="who is raphael?" data-pt="quem é o raphael?"></button>
+        <button class="chip mono" data-q-en="what is his stack?" data-q-pt="qual a stack dele?" data-en="what is his stack?" data-pt="qual a stack dele?"></button>
+        <button class="chip mono" data-q-en="tell me about ratchet" data-q-pt="me fala do ratchet" data-en="tell me about ratchet" data-pt="me fala do ratchet"></button>
+        <button class="chip mono" data-q-en="is he available?" data-q-pt="ele está disponível?" data-en="is he available?" data-pt="ele está disponível?"></button>
+      </div>
+      <form class="term-in" id="term-form">
+        <span class="mono" style="color:var(--cyan)">&gt;</span>
+        <input class="mono" id="term-input" type="text" autocomplete="off" spellcheck="false"
+               data-ph-en="ask about Raphael... (try 'help')" data-ph-pt="pergunte sobre o Raphael... (tente 'help')" aria-label="Ask the terminal">
+      </form>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2 data-en="deployed systems" data-pt="sistemas no ar"></h2>
+    <div class="projects">
+
+      <article class="project frame">
+        <h3>RATCHET</h3>
+        <div class="role" data-en="designed · built · operating in production" data-pt="projetei · construí · operando em produção"></div>
+        <p data-en="A multi-tenant SaaS where AI investigates production bugs the way a senior engineer would: it digs through the repo, logs and database, forms hypotheses, checks evidence and delivers a diagnosis with a root cause. Bring-your-own-key LLM architecture with per-tenant encrypted credentials, subscription billing with signed Stripe webhooks, MFA (TOTP + email OTP), OAuth2 PKCE — on AWS with Terraform, automated backups and CI/CD. <strong>Every layer is mine, including the full React frontend.</strong>"
+           data-pt="SaaS multi-tenant onde a IA investiga bugs de produção como um engenheiro sênior faria: vasculha repo, logs e banco, levanta hipóteses, checa evidências e entrega diagnóstico com causa raiz. Arquitetura LLM bring-your-own-key com credenciais cifradas por tenant, billing recorrente com webhooks Stripe assinados, MFA (TOTP + OTP por email), OAuth2 PKCE — na AWS com Terraform, backups automatizados e CI/CD. <strong>Toda camada é minha, incluindo o frontend React completo.</strong>"></p>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">MongoDB</span>
+          <span class="tag">React</span><span class="tag">AWS</span><span class="tag">Terraform</span>
+          <span class="tag">Stripe</span><span class="tag">LLM agents</span><span class="tag">Docker</span>
+        </div>
+        <a class="more" href="https://myratchet.com">myratchet.com →</a>
+      </article>
+
+      <article class="project frame">
+        <h3>RATCHET COMMIT MESSAGE FOR CLAUDE</h3>
+        <div class="role" data-en="JetBrains Marketplace plugin — published" data-pt="plugin no JetBrains Marketplace — publicado"></div>
+        <p data-en="An IntelliJ-platform plugin that generates commit messages with Claude straight from the IDE's commit dialog — plus AI-assisted commit splitting and branch-off flows. Talks to the Claude Code CLI (no API key needed), with native Windows/WSL runtime detection."
+           data-pt="Plugin pra plataforma IntelliJ que gera mensagens de commit com Claude direto do commit dialog da IDE — além de split de commits e branch-off assistidos por IA. Conversa com o CLI do Claude Code (sem precisar de API key), com detecção nativa de runtime Windows/WSL."></p>
+        <div class="tags">
+          <span class="tag">IntelliJ Platform</span><span class="tag">Claude</span><span class="tag">Git</span><span class="tag">Windows/WSL</span>
+        </div>
+        <a class="more" href="https://plugins.jetbrains.com/plugin/32472-ratchet-commit-message-for-claude" data-en="View on Marketplace →" data-pt="Ver no Marketplace →"></a>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2 data-en="mission log" data-pt="diário de missão"></h2>
+    <div class="xp frame">
+      <div class="job">
+        <div class="when">2025–2026</div>
+        <div>
+          <h3 data-en="Senior Software Engineer <span class='co'>· Bee2pay (fintech)</span>" data-pt="Engenheiro de Software Sênior <span class='co'>· Bee2pay (fintech)</span>"></h3>
+          <p data-en="Payment and transaction services in a high-volume environment: async workflows with AWS Lambda and RabbitMQ, scalable APIs with Django/DRF and PostgreSQL behind API Gateway, high-performance access patterns on DynamoDB, auth with Keycloak, secrets and encryption with KMS/Secrets Manager, CI/CD on Jenkins, incident investigation over CloudWatch and Elasticsearch/Kibana, and production stabilization. Designed a multi-tenant AI architecture with isolated LLM credentials per client."
+             data-pt="Serviços de pagamento e transações em ambiente de alto volume: fluxos assíncronos com AWS Lambda e RabbitMQ, APIs escaláveis com Django/DRF e PostgreSQL atrás de API Gateway, padrões de acesso de alta performance em DynamoDB, auth com Keycloak, segredos e criptografia com KMS/Secrets Manager, CI/CD no Jenkins, investigação de incidentes em CloudWatch e Elasticsearch/Kibana, e estabilização de produção. Projetei arquitetura de IA multi-tenant com credenciais LLM isoladas por cliente."></p>
+        </div>
+      </div>
+      <div class="job">
+        <div class="when">2024–2025</div>
+        <div>
+          <h3 data-en="Senior Software Engineer <span class='co'>· Cadmus / BRK Ambiental</span>" data-pt="Engenheiro de Software Sênior <span class='co'>· Cadmus / BRK Ambiental</span>"></h3>
+          <p data-en="Backend services with Django/DRF and complex PostgreSQL optimization. Cleared 100% of the existing support ticket queue while refactoring for scalability."
+             data-pt="Serviços backend com Django/DRF e otimização de consultas complexas em PostgreSQL. Zerei a fila de chamados de suporte enquanto refatorava por escalabilidade."></p>
+        </div>
+      </div>
+      <div class="job">
+        <div class="when">2023–2024</div>
+        <div>
+          <h3 data-en="Software Engineer <span class='co'>· Stefanini / Goodyear</span>" data-pt="Engenheiro de Software <span class='co'>· Stefanini / Goodyear</span>"></h3>
+          <p data-en="Django backend evolution, Python 2.7 → 3.10 migration, React Native + REST integration on Red Hat environments."
+             data-pt="Evolução de backend Django, migração Python 2.7 → 3.10, integração React Native + REST em ambientes Red Hat."></p>
+        </div>
+      </div>
+      <div class="job">
+        <div class="when">2020–2023</div>
+        <div>
+          <h3 data-en="Software Engineer <span class='co'>· TracktraceRX, Alvarez &amp; Marsal, Tekton, Eva Scientific</span>" data-pt="Engenheiro de Software <span class='co'>· TracktraceRX, Alvarez &amp; Marsal, Tekton, Eva Scientific</span>"></h3>
+          <p data-en="Flask/Django APIs, Odoo XML integrations, OTP auth with Twilio, Salesforce/Sensedia integrations, Angular frontends, and Python-hardware integration that cut equipment cost ~90%."
+             data-pt="APIs Flask/Django, integrações XML com Odoo, autenticação OTP com Twilio, integrações Salesforce/Sensedia, frontends Angular e integração Python-hardware que cortou ~90% do custo de equipamento."></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2 data-en="loadout" data-pt="arsenal"></h2>
+    <div class="skills">
+      <div class="skill-group frame">
+        <h3 data-en="Backend &amp; APIs" data-pt="Backend &amp; APIs"></h3>
+        <p>Python · Django/DRF · FastAPI · Flask · REST · OpenAPI/Swagger (drf-spectacular) · OAuth2/JWT · Keycloak</p>
+      </div>
+      <div class="skill-group frame">
+        <h3 data-en="Architecture" data-pt="Arquitetura"></h3>
+        <p data-en="Microservices · serverless · event-driven · distributed systems · API &amp; system design"
+           data-pt="Microserviços · serverless · event-driven · sistemas distribuídos · API &amp; system design"></p>
+      </div>
+      <div class="skill-group frame">
+        <h3 data-en="Async &amp; Data" data-pt="Assíncrono &amp; Dados"></h3>
+        <p>RabbitMQ · SQS/SNS · Celery · PostgreSQL · DynamoDB · MongoDB · Redis</p>
+      </div>
+      <div class="skill-group frame">
+        <h3 data-en="Cloud &amp; Ops" data-pt="Cloud &amp; Ops"></h3>
+        <p>AWS (Lambda · API Gateway · S3 · IAM · KMS · Secrets Manager · SES · CloudWatch) · Elasticsearch/Kibana · Terraform · Docker · CI/CD · GitHub Actions · Jenkins</p>
+      </div>
+      <div class="skill-group frame">
+        <h3 data-en="Frontend" data-pt="Frontend"></h3>
+        <p>React · TypeScript · Angular/NgRx · React Native</p>
+      </div>
+      <div class="skill-group frame">
+        <h3 data-en="AI Engineering" data-pt="Engenharia de IA"></h3>
+        <p data-en="Multi-tenant LLM · agent pipelines · BYO-key isolation · LLM data structuring"
+           data-pt="LLM multi-tenant · pipelines de agentes · isolamento BYO-key · estruturação de dados com LLM"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <h2 data-en="background" data-pt="formação"></h2>
+    <p data-en="MBA in Software Engineering (USP) · B.Sc. in Mechatronics Engineering (UNIP) · Portuguese (native), English (C1)."
+       data-pt="MBA em Engenharia de Software (USP) · Bacharel em Engenharia Mecatrônica (UNIP) · Português (nativo), Inglês (C1)."></p>
+  </section>
+
+  <footer>
+    <div class="statusbar">
+      <span><span class="dot"></span><span data-en="AVAILABLE FOR HIRE" data-pt="DISPONÍVEL PARA CONTRATAÇÃO"></span></span>
+      <a href="https://calendly.com/raphamoraleng/30min" data-en="book a call" data-pt="agendar conversa"></a>
+      <a href="mailto:raphamoraleng@gmail.com">raphamoraleng@gmail.com</a>
+      <a href="https://www.linkedin.com/in/raphaelmoral/">linkedin/raphaelmoral</a>
+      <a href="https://github.com/raphamoral">github/raphamoral</a>
+    </div>
+    <p class="fine" data-en="SÃO PAULO / BR · REMOTE-READY WORLDWIDE · UTC-3" data-pt="SÃO PAULO / BR · PRONTO PRA REMOTO MUNDIAL · UTC-3"></p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  /* ---------- i18n ---------- */
+  var LANGS = ["en", "pt"];
+  var BOOT = {
+    en: "init raphael.moral --profile senior-backend ... <span class='ok'>[OK]</span> ",
+    pt: "init raphael.moral --perfil backend-senior ... <span class='ok'>[OK]</span> "
+  };
+  function detectLang() {
+    try { var s = localStorage.getItem("lang"); if (LANGS.includes(s)) return s; } catch (e) {}
+    return (navigator.language || "en").toLowerCase().startsWith("pt") ? "pt" : "en";
+  }
+  var bootTimer = null;
+  function typeBoot(lang) {
+    var el = document.getElementById("bootline");
+    var full = BOOT[lang];
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.innerHTML = "&gt; " + full + "<span class='caret'>&nbsp;</span>"; return;
+    }
+    clearInterval(bootTimer);
+    var plain = full.replace(/<[^>]*>/g, ""), i = 0;
+    bootTimer = setInterval(function () {
+      i += 2;
+      if (i >= plain.length) {
+        clearInterval(bootTimer);
+        el.innerHTML = "&gt; " + full + "<span class='caret'>&nbsp;</span>";
+      } else {
+        el.innerHTML = "&gt; " + plain.slice(0, i) + "<span class='caret'>&nbsp;</span>";
+      }
+    }, 24);
+  }
+  function applyLang(lang) {
+    document.documentElement.lang = lang === "pt" ? "pt-BR" : "en";
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      el.innerHTML = el.getAttribute("data-" + lang);
+    });
+    var btn = document.getElementById("lang-toggle");
+    btn.textContent = lang === "pt" ? "EN" : "PT";
+    btn.setAttribute("aria-pressed", lang === "pt");
+    typeBoot(lang);
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+  }
+  var lang = detectLang();
+  applyLang(lang);
+  document.getElementById("lang-toggle").addEventListener("click", function () {
+    lang = lang === "pt" ? "en" : "pt"; applyLang(lang);
+  });
+
+  /* ---------- constellation field ---------- */
+  var cv = document.getElementById("field"), ctx = cv.getContext("2d");
+  var pts = [], W, H, running = true;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function resize() {
+    W = cv.width = innerWidth; H = cv.height = innerHeight;
+    var n = Math.min(90, Math.floor(W * H / 22000));
+    pts = [];
+    for (var i = 0; i < n; i++) pts.push({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25,
+      r: Math.random() * 1.4 + .4
+    });
+  }
+  function frame() {
+    if (!running) return;
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      if (!reduced) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+      }
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7);
+      ctx.fillStyle = "rgba(125,244,228,.5)"; ctx.fill();
+      for (var j = i + 1; j < pts.length; j++) {
+        var q = pts[j], dx = p.x - q.x, dy = p.y - q.y, d = dx * dx + dy * dy;
+        if (d < 15000) {
+          ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = "rgba(125,244,228," + (0.10 * (1 - d / 15000)) + ")";
+          ctx.lineWidth = 1; ctx.stroke();
+        }
+      }
+    }
+    if (!reduced) requestAnimationFrame(frame);
+  }
+  resize(); frame();
+  if (reduced) { frame(); } /* uma passada estática */
+  addEventListener("resize", function () { resize(); if (reduced) frame(); });
+  document.addEventListener("visibilitychange", function () {
+    running = !document.hidden;
+    if (running && !reduced) requestAnimationFrame(frame);
+  });
+})();
+
+/* ---------- RMP-AI: índice curado com matching por palavra-chave ---------- */
+(function () {
+  var out = document.getElementById("term-out");
+  var form = document.getElementById("term-form");
+  var input = document.getElementById("term-input");
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function lang() { return document.documentElement.lang === "pt-BR" ? "pt" : "en"; }
+  function norm(s) {
+    return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  }
+
+  var KB = [
+    { k: ["who", "quem", "about", "sobre", "raphael", "bio"],
+      en: "Raphael Moral Piazera — Senior Software Engineer from São Paulo, backend at the core. Six years shipping Python services (payments at high-volume fintechs, queues, async pipelines), React frontends, and multi-tenant AI systems he designs and operates end-to-end. Started in mechatronics: he learned early that failing software has consequences you can touch.",
+      pt: "Raphael Moral Piazera — Engenheiro de Software Sênior de São Paulo, backend no núcleo. Seis anos entregando serviços Python (pagamentos em fintech de alto volume, filas, pipelines assíncronos), frontends React e sistemas de IA multi-tenant que ele projeta e opera de ponta a ponta. Começou na mecatrônica: aprendeu cedo que software falhando tem consequência que se toca." },
+    { k: ["stack", "tech", "tecnolog", "skills", "linguag", "language", "tools"],
+      en: "Core: Python (Django/DRF, FastAPI, Flask) · PostgreSQL, DynamoDB, MongoDB · RabbitMQ, SQS/SNS, Celery · AWS (Lambda, S3, IAM, Secrets Manager) + Terraform + Docker + CI/CD. Architecture: microservices, serverless, event-driven, distributed systems. Frontend: React, TypeScript, Angular/NgRx, React Native. AI: multi-tenant LLM architectures, agent pipelines, BYO-key credential isolation.",
+      pt: "Núcleo: Python (Django/DRF, FastAPI, Flask) · PostgreSQL, DynamoDB, MongoDB · RabbitMQ, SQS/SNS, Celery · AWS (Lambda, S3, IAM, Secrets Manager) + Terraform + Docker + CI/CD. Arquitetura: microserviços, serverless, event-driven, sistemas distribuídos. Frontend: React, TypeScript, Angular/NgRx, React Native. IA: arquiteturas LLM multi-tenant, pipelines de agentes, isolamento de credenciais BYO-key." },
+    { k: ["ratchet", "saas", "product", "produto", "startup", "bug"],
+      en: "Ratchet (myratchet.com) is a multi-tenant SaaS Raphael designed, built and operates solo: AI investigates production bugs — digging through repo, logs and database — and delivers a diagnosis with root cause and evidence. FastAPI, MongoDB, React, AWS/Terraform, Stripe billing with signed webhooks, MFA. It runs itself; his full-time focus goes to the team he joins.",
+      pt: "O Ratchet (myratchet.com) é um SaaS multi-tenant que o Raphael projetou, construiu e opera sozinho: a IA investiga bugs de produção — vasculhando repo, logs e banco — e entrega diagnóstico com causa raiz e evidência. FastAPI, MongoDB, React, AWS/Terraform, billing Stripe com webhooks assinados, MFA. Roda sozinho; o foco full-time dele vai pro time que o contratar." },
+    { k: ["plugin", "jetbrains", "intellij", "commit", "claude", "marketplace"],
+      en: "He published \"Ratchet Commit Message for Claude\" on the JetBrains Marketplace: an IntelliJ-platform plugin that writes commit messages with Claude from the IDE's commit dialog, splits big changesets into logical commits, and automates branch-off flows. It talks to the Claude Code CLI — no API key needed.",
+      pt: "Ele publicou o \"Ratchet Commit Message for Claude\" no JetBrains Marketplace: plugin pra plataforma IntelliJ que escreve mensagens de commit com Claude direto do commit dialog, divide changesets grandes em commits lógicos e automatiza branch-off. Conversa com o CLI do Claude Code — sem precisar de API key." },
+    { k: ["experience", "experiencia", "career", "carreira", "history", "empresas", "companies", "fintech", "bee2pay", "cadmus", "stefanini"],
+      en: "Trajectory: Eva Scientific (Python + hardware) → Tekton Finance → Alvarez & Marsal → TracktraceRX → Stefanini/Goodyear → Cadmus/BRK (cleared 100% of the support queue) → Bee2pay (senior, high-volume payments: Lambda, RabbitMQ, DynamoDB, incident response). Seven companies, six years, from machines to money to AI.",
+      pt: "Trajetória: Eva Scientific (Python + hardware) → Tekton Finance → Alvarez & Marsal → TracktraceRX → Stefanini/Goodyear → Cadmus/BRK (zerou a fila de suporte) → Bee2pay (sênior, pagamentos de alto volume: Lambda, RabbitMQ, DynamoDB, resposta a incidentes). Sete empresas, seis anos, de máquinas a dinheiro a IA." },
+    { k: ["ai", "ia", "llm", "artificial", "agent", "machine learning"],
+      en: "AI is where his backend experience compounds: he designed a multi-tenant AI architecture with isolated LLM credentials per client at Bee2pay, built LLM pipelines that turn unstructured data into structured formats, and orchestrates investigation agents in Ratchet via CLI subprocess — session isolation, structured output parsing, cost control, failure handling.",
+      pt: "IA é onde a experiência de backend dele se multiplica: projetou arquitetura de IA multi-tenant com credenciais LLM isoladas por cliente na Bee2pay, construiu pipelines LLM que estruturam dados desestruturados, e orquestra agentes de investigação no Ratchet via CLI subprocess — isolamento de sessão, parsing de saída estruturada, controle de custo, tratamento de falha." },
+    { k: ["available", "disponivel", "hire", "contratar", "job", "vaga", "open", "remote", "remoto"],
+      en: "Yes — available immediately, remote worldwide (UTC-3) or hybrid in São Paulo. Looking for senior backend / full-stack roles where AI-forward engineering matters. Book 30 minutes directly: calendly.com/raphamoraleng/30min",
+      pt: "Sim — disponível pra início imediato, remoto mundial (UTC-3) ou híbrido em São Paulo. Buscando posições sênior backend / full-stack onde engenharia com IA faça diferença. Agende 30 minutos direto: calendly.com/raphamoraleng/30min" },
+    { k: ["contact", "contato", "email", "linkedin", "github", "reach", "falar"],
+      en: "Email: raphamoraleng@gmail.com · LinkedIn: linkedin.com/in/raphaelmoral · GitHub: github.com/raphamoral · Calendly: calendly.com/raphamoraleng/30min. He answers fast.",
+      pt: "Email: raphamoraleng@gmail.com · LinkedIn: linkedin.com/in/raphaelmoral · GitHub: github.com/raphamoral · Calendly: calendly.com/raphamoraleng/30min. Ele responde rápido." },
+    { k: ["education", "formacao", "mba", "degree", "faculdade", "usp", "study"],
+      en: "MBA in Software Engineering (USP) · B.Sc. in Mechatronics Engineering (UNIP). Portuguese native, English C1.",
+      pt: "MBA em Engenharia de Software (USP) · Bacharel em Engenharia Mecatrônica (UNIP). Português nativo, inglês C1." },
+    { k: ["english", "ingles", "idioma"],
+      en: "Advanced English (C1) — comfortable in international teams, written and spoken.",
+      pt: "Inglês avançado (C1) — confortável em times internacionais, escrito e falado." },
+    { k: ["salary", "salario", "rate", "quanto", "cobra", "price", "charge", "compensation", "pretensao"],
+      en: "That conversation he prefers to have himself — write to raphamoraleng@gmail.com and he'll answer directly.",
+      pt: "Essa conversa ele prefere ter pessoalmente — escreve pra raphamoraleng@gmail.com que ele responde direto." },
+    { k: ["real ai", "are you", "voce e", "gpt", "chatgpt", "model", "modelo", "robot"],
+      en: "Honest answer: I'm not an LLM — I'm a curated index Raphael wrote and wired into this terminal. Which is fitting: he'd rather ship something reliable and honest than something impressive that hallucinates. The real AI engineering is in Ratchet.",
+      pt: "Resposta honesta: não sou um LLM — sou um índice curado que o Raphael escreveu e ligou neste terminal. O que combina com ele: prefere entregar algo confiável e honesto a algo impressionante que alucina. A engenharia de IA de verdade está no Ratchet." },
+    { k: ["sudo hire", "sudo"],
+      en: "[sudo] permission granted. Deploying raphael.moral to your team... done.\nNext step: raphamoraleng@gmail.com",
+      pt: "[sudo] permissão concedida. Deployando raphael.moral no teu time... concluído.\nPróximo passo: raphamoraleng@gmail.com" }
+  ];
+
+  var FALLBACK = {
+    en: "No index entry for that. Try: stack · experience · ratchet · plugin · ai · education · contact · available — or type 'help'.",
+    pt: "Sem entrada no índice pra isso. Tenta: stack · experiencia · ratchet · plugin · ia · formacao · contato · disponivel — ou digita 'help'." };
+  var HELP = {
+    en: "Commands: ask anything about Raphael (who/stack/experience/ratchet/plugin/ai/contact/available) · 'clear' resets · try 'sudo hire raphael'.",
+    pt: "Comandos: pergunte qualquer coisa sobre o Raphael (quem/stack/experiencia/ratchet/plugin/ia/contato/disponivel) · 'clear' limpa · tenta 'sudo hire raphael'." };
+  var INTRO = {
+    en: "RMP-AI online. Ask me anything about Raphael — or pick a question below.",
+    pt: "RMP-AI online. Pergunte qualquer coisa sobre o Raphael — ou escolha uma pergunta abaixo." };
+
+  function print(cls, text, typed) {
+    var div = document.createElement("div");
+    div.className = cls;
+    out.appendChild(div);
+    if (!typed || reduced) { div.textContent = text; out.scrollTop = out.scrollHeight; return; }
+    var i = 0;
+    var t = setInterval(function () {
+      i += 3;
+      div.textContent = text.slice(0, i);
+      out.scrollTop = out.scrollHeight;
+      if (i >= text.length) clearInterval(t);
+    }, 12);
+  }
+
+  function answer(q) {
+    var nq = norm(q);
+    if (!nq.trim()) return;
+    print("u", "> " + q, false);
+    if (nq === "clear") { out.innerHTML = ""; print("sys", INTRO[lang()], false); return; }
+    if (nq === "help") { print("a", HELP[lang()], true); return; }
+    var best = null, bestScore = 0;
+    KB.forEach(function (e) {
+      var score = 0;
+      e.k.forEach(function (kw) { if (nq.indexOf(norm(kw)) !== -1) score += kw.length; });
+      if (score > bestScore) { bestScore = score; best = e; }
+    });
+    print("a", best ? best[lang()] : FALLBACK[lang()], true);
+  }
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    answer(input.value); input.value = "";
+  });
+  document.getElementById("term-chips").addEventListener("click", function (ev) {
+    var b = ev.target.closest(".chip"); if (!b) return;
+    answer(b.getAttribute("data-q-" + lang()));
+  });
+
+  function placeholders() {
+    input.placeholder = input.getAttribute("data-ph-" + lang());
+  }
+  placeholders();
+  document.getElementById("lang-toggle").addEventListener("click", placeholders);
+  print("sys", INTRO[lang()], false);
+})();
+</script>
+</body>
+</html>
