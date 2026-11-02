@@ -137,9 +137,8 @@
     clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
   }
   .project a.more { font-family: "IBM Plex Mono", monospace; font-size: 13.5px; }
-  .worth { font-family: "Chakra Petch", sans-serif; font-size: 22px; font-weight: 600; color: var(--cyan); margin: 0 0 14px; }
-  .worth small { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 400; color: var(--ink-soft); letter-spacing: .06em; margin-top: 2px; }
-  .github-worth { margin: 0 0 18px; font-size: 32px; text-shadow: 0 0 30px rgba(125,244,228,.35); }
+  .validation { margin: 0 0 18px; color: var(--ink-soft); max-width: 68ch; font-size: 15.5px; }
+  .validation strong { color: var(--ink); }
 
   .xp { display: grid; gap: 0; }
   .job {
@@ -272,7 +271,8 @@
 
   <section id="projects">
     <h2 data-en="selected systems" data-pt="sistemas em destaque"></h2>
-    <div class="worth github-worth"><span data-en="My GitHub: ~US$ 200k" data-pt="Meu GitHub: ~US$ 200k"></span><small data-en="DataVendor estimate · Nov 2026" data-pt="estimativa DataVendor · nov/2026"></small></div>
+    <p class="validation" data-en="To validate my knowledge and personal projects, I submitted them to <a href=&quot;https://datavendor.ai&quot;>datavendor.ai</a>: the platform's estimates reach <strong>US$ 200k</strong> (Nov 2026)."
+       data-pt="Para validar meus conhecimentos e projetos pessoais, submeti meu trabalho ao <a href=&quot;https://datavendor.ai&quot;>datavendor.ai</a>: as estimativas da plataforma chegam a <strong>US$ 200k</strong> (nov/2026)."></p>
     <div class="projects">
 
       <article class="project frame">
@@ -285,8 +285,19 @@
           <span class="tag">React</span><span class="tag">AWS</span>
           <span class="tag">Stripe</span><span class="tag">LLM agents</span><span class="tag">Docker</span>
         </div>
-        <div class="worth">US$ 29.4k–32.7k<small data-en="DataVendor estimate · Nov 2026" data-pt="estimativa DataVendor · nov/2026"></small></div>
         <a class="more" href="https://myratchet.com">myratchet.com →</a>
+      </article>
+
+      <article class="project frame">
+        <h3>AOEN</h3>
+        <div class="role" data-en="MBA thesis · USP/Esalq · open replication package" data-pt="TCC do MBA · USP/Esalq · pacote de replicação aberto"></div>
+        <p data-en="AOEN stands for <em>Arquitetura Orgânica orientada a Estratégia de Negócio</em>: organic architecture driven by business strategy. Built for SaaS and tested in a controlled in silico experiment: 100 product ideas across 7 approaches, 6,300 data points and full coverage. AOEN ranked first with 8.91, against 7.69 for the no-framework control. A follow-up symmetry study showed most of the gain comes from the questions it prescribes, not from the framework apparatus. <strong>The data, scripts and known limitations are all public.</strong>"
+           data-pt="AOEN significa <em>Arquitetura Orgânica orientada a Estratégia de Negócio</em>. Feita para SaaS e testada em experimento controlado in silico: 100 ideias de produto em 7 abordagens, 6.300 pontos de dados e cobertura total. O AOEN ficou em 1º com 8,91, contra 7,69 do controle sem framework. Um estudo de simetria posterior mostrou que a maior parte do ganho vem das perguntas que ele prescreve, não do aparato do framework. <strong>Dados, scripts e limitações conhecidas são públicos.</strong>"></p>
+        <div class="tags">
+          <span class="tag">Software architecture</span><span class="tag">SaaS</span><span class="tag">Experiment design</span>
+          <span class="tag">LLM evaluation</span><span class="tag">Python</span>
+        </div>
+        <a class="more" href="https://github.com/raphamoral/aoen-experiment" data-en="View repository →" data-pt="Ver repositório →"></a>
       </article>
 
       <article class="project frame">
@@ -298,7 +309,6 @@
           <span class="tag">Python</span><span class="tag">Evolutionary agents</span><span class="tag">LLM policy</span>
           <span class="tag">Order book</span><span class="tag">Parquet</span><span class="tag">Binance</span><span class="tag">B3</span>
         </div>
-        <div class="worth">US$ 28.4k–31.5k<small data-en="DataVendor estimate · Nov 2026" data-pt="estimativa DataVendor · nov/2026"></small></div>
       </article>
 
       <article class="project frame">
@@ -309,7 +319,6 @@
         <div class="tags">
           <span class="tag">IntelliJ Platform</span><span class="tag">Claude</span><span class="tag">Git</span><span class="tag">Windows/WSL</span>
         </div>
-        <div class="worth">US$ 3.9k–6.2k<small data-en="DataVendor estimate · Nov 2026" data-pt="estimativa DataVendor · nov/2026"></small></div>
         <a class="more" href="https://plugins.jetbrains.com/plugin/32472-ratchet-commit-message-for-claude" data-en="View on Marketplace →" data-pt="Ver no Marketplace →"></a>
       </article>
 
@@ -521,12 +530,15 @@
     { k: ["ratchet", "saas", "product", "produto", "startup", "bug"],
       en: "Ratchet (myratchet.com) is a multi-tenant SaaS Raphael designed, built and operates solo: AI investigates production bugs — digging through repo, logs and database — and delivers a diagnosis with root cause and evidence. FastAPI, MongoDB, React, AWS, Stripe billing with signed webhooks, MFA. It runs itself; his full-time focus goes to the team he joins.",
       pt: "O Ratchet (myratchet.com) é um SaaS multi-tenant que o Raphael projetou, construiu e opera sozinho: a IA investiga bugs de produção — vasculhando repo, logs e banco — e entrega diagnóstico com causa raiz e evidência. FastAPI, MongoDB, React, AWS, billing Stripe com webhooks assinados, MFA. Roda sozinho; o foco full-time dele vai pro time que o contratar." },
+    { k: ["aoen", "tcc", "thesis", "mba", "pesquisa", "research", "esalq"],
+      en: "AOEN is Raphael's MBA thesis at USP/Esalq. The name is Portuguese for organic architecture driven by business strategy (Arquitetura Orgânica orientada a Estratégia de Negócio), aimed at SaaS. In an in silico experiment with 100 ideas and 7 approaches it ranked first (8.91 vs 7.69 for the no-framework control). A symmetry study showed most of the gain comes from the questions it prescribes. Data and limitations are public: github.com/raphamoral/aoen-experiment",
+      pt: "O AOEN é o TCC do MBA do Raphael na USP/Esalq. O nome significa Arquitetura Orgânica orientada a Estratégia de Negócio, voltada para SaaS. Em experimento in silico com 100 ideias e 7 abordagens, ficou em 1º (8,91 contra 7,69 do controle sem framework). Um estudo de simetria mostrou que a maior parte do ganho vem das perguntas que ele prescreve. Dados e limitações são públicos: github.com/raphamoral/aoen-experiment" },
     { k: ["trader", "trading", "b3", "crypto", "cripto", "backtest", "order book"],
       en: "AI Trader is Raphael's solo research and paper-trading system for crypto and B3: no lookahead, holdout-first validation, risk limits the agents cannot change, a from-scratch order book matching engine and 362 tests in CI. No real money has been traded.",
       pt: "O AI Trader é o sistema solo de pesquisa e paper trading do Raphael para cripto e B3: sem lookahead, validação com holdout, limites de risco que os agentes não alteram, matching engine próprio de livro de ofertas e 362 testes no CI. Nenhum dinheiro real foi operado." },
     { k: ["datavendor", "valuation", "worth", "quanto vale", "valor"],
-      en: "DataVendor, a marketplace for AI training data, estimated Raphael's GitHub at about US$ 200k in Nov 2026: Ratchet at US$ 29.4k–32.7k, AI Trader at US$ 28.4k–31.5k and the JetBrains plugin at US$ 3.9k–6.2k. These are platform estimates, not sales.",
-      pt: "O DataVendor, marketplace de dados para treinar IA, estimou o GitHub do Raphael em cerca de US$ 200k em nov/2026: Ratchet em US$ 29,4k–32,7k, AI Trader em US$ 28,4k–31,5k e o plugin JetBrains em US$ 3,9k–6,2k. São estimativas da plataforma, não vendas." },
+      en: "Raphael submitted his projects to datavendor.ai to validate his knowledge and personal work: the platform's estimates reach US$ 200k (Nov 2026). They are estimates, not sales. Technology is what he sells and what companies hire him for.",
+      pt: "O Raphael submeteu seus projetos ao datavendor.ai para validar seus conhecimentos e trabalhos pessoais: as estimativas da plataforma chegam a US$ 200k (nov/2026). São estimativas, não vendas. Tecnologia é o que ele vende e o motivo pelo qual as empresas o contratam." },
     { k: ["plugin", "jetbrains", "intellij", "commit", "claude", "marketplace"],
       en: "He published \"Ratchet Commit Message for Claude\" on the JetBrains Marketplace: an IntelliJ-platform plugin that writes commit messages with Claude from the IDE's commit dialog, splits big changesets into logical commits, and automates branch-off flows. It talks to the Claude Code CLI — no API key needed.",
       pt: "Ele publicou o \"Ratchet Commit Message for Claude\" no JetBrains Marketplace: plugin pra plataforma IntelliJ que escreve mensagens de commit com Claude direto do commit dialog, divide changesets grandes em commits lógicos e automatiza branch-off. Conversa com o CLI do Claude Code — sem precisar de API key." },
