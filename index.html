@@ -137,6 +137,9 @@
     clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
   }
   .project a.more { font-family: "IBM Plex Mono", monospace; font-size: 13.5px; }
+  .worth { font-family: "Chakra Petch", sans-serif; font-size: 22px; font-weight: 600; color: var(--cyan); margin: 0 0 14px; }
+  .worth small { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 400; color: var(--ink-soft); letter-spacing: .06em; margin-top: 2px; }
+  .github-worth { margin: 0 0 18px; font-size: 32px; text-shadow: 0 0 30px rgba(125,244,228,.35); }
 
   .xp { display: grid; gap: 0; }
   .job {
@@ -268,7 +271,8 @@
   </section>
 
   <section id="projects">
-    <h2 data-en="deployed systems" data-pt="sistemas no ar"></h2>
+    <h2 data-en="selected systems" data-pt="sistemas em destaque"></h2>
+    <div class="worth github-worth"><span data-en="My GitHub: ~US$ 200k" data-pt="Meu GitHub: ~US$ 200k"></span><small data-en="DataVendor estimate · Nov 2026" data-pt="estimativa DataVendor · nov/2026"></small></div>
     <div class="projects">
 
       <article class="project frame">
@@ -281,7 +285,20 @@
           <span class="tag">React</span><span class="tag">AWS</span>
           <span class="tag">Stripe</span><span class="tag">LLM agents</span><span class="tag">Docker</span>
         </div>
+        <div class="worth">US$ 29.4k–32.7k<small data-en="DataVendor estimate · Nov 2026" data-pt="estimativa DataVendor · nov/2026"></small></div>
         <a class="more" href="https://myratchet.com">myratchet.com →</a>
+      </article>
+
+      <article class="project frame">
+        <h3>AI TRADER</h3>
+        <div class="role" data-en="research &amp; paper trading · solo · private repository" data-pt="pesquisa e paper trading · autor único · repositório privado"></div>
+        <p data-en="A self-hosted research system for crypto and B3 built to answer one question: does a strategy still work on data it never saw? No lookahead, a holdout kept out of selection and risk limits the agents cannot change. Includes a from-scratch order book matching engine with crash recovery and 362 tests in CI. <strong>No real money has been traded.</strong>"
+           data-pt="Sistema self-hosted de pesquisa para cripto e B3, feito para responder uma pergunta: a estratégia ainda funciona em dados que nunca viu? Sem lookahead, com holdout fora da seleção e limites de risco que os agentes não alteram. Inclui matching engine próprio de livro de ofertas com recuperação de falhas e 362 testes no CI. <strong>Nenhum dinheiro real foi operado.</strong>"></p>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Evolutionary agents</span><span class="tag">LLM policy</span>
+          <span class="tag">Order book</span><span class="tag">Parquet</span><span class="tag">Binance</span><span class="tag">B3</span>
+        </div>
+        <div class="worth">US$ 28.4k–31.5k<small data-en="DataVendor estimate · Nov 2026" data-pt="estimativa DataVendor · nov/2026"></small></div>
       </article>
 
       <article class="project frame">
@@ -292,6 +309,7 @@
         <div class="tags">
           <span class="tag">IntelliJ Platform</span><span class="tag">Claude</span><span class="tag">Git</span><span class="tag">Windows/WSL</span>
         </div>
+        <div class="worth">US$ 3.9k–6.2k<small data-en="DataVendor estimate · Nov 2026" data-pt="estimativa DataVendor · nov/2026"></small></div>
         <a class="more" href="https://plugins.jetbrains.com/plugin/32472-ratchet-commit-message-for-claude" data-en="View on Marketplace →" data-pt="Ver no Marketplace →"></a>
       </article>
 
@@ -503,6 +521,12 @@
     { k: ["ratchet", "saas", "product", "produto", "startup", "bug"],
       en: "Ratchet (myratchet.com) is a multi-tenant SaaS Raphael designed, built and operates solo: AI investigates production bugs — digging through repo, logs and database — and delivers a diagnosis with root cause and evidence. FastAPI, MongoDB, React, AWS, Stripe billing with signed webhooks, MFA. It runs itself; his full-time focus goes to the team he joins.",
       pt: "O Ratchet (myratchet.com) é um SaaS multi-tenant que o Raphael projetou, construiu e opera sozinho: a IA investiga bugs de produção — vasculhando repo, logs e banco — e entrega diagnóstico com causa raiz e evidência. FastAPI, MongoDB, React, AWS, billing Stripe com webhooks assinados, MFA. Roda sozinho; o foco full-time dele vai pro time que o contratar." },
+    { k: ["trader", "trading", "b3", "crypto", "cripto", "backtest", "order book"],
+      en: "AI Trader is Raphael's solo research and paper-trading system for crypto and B3: no lookahead, holdout-first validation, risk limits the agents cannot change, a from-scratch order book matching engine and 362 tests in CI. No real money has been traded.",
+      pt: "O AI Trader é o sistema solo de pesquisa e paper trading do Raphael para cripto e B3: sem lookahead, validação com holdout, limites de risco que os agentes não alteram, matching engine próprio de livro de ofertas e 362 testes no CI. Nenhum dinheiro real foi operado." },
+    { k: ["datavendor", "valuation", "worth", "quanto vale", "valor"],
+      en: "DataVendor, a marketplace for AI training data, estimated Raphael's GitHub at about US$ 200k in Nov 2026: Ratchet at US$ 29.4k–32.7k, AI Trader at US$ 28.4k–31.5k and the JetBrains plugin at US$ 3.9k–6.2k. These are platform estimates, not sales.",
+      pt: "O DataVendor, marketplace de dados para treinar IA, estimou o GitHub do Raphael em cerca de US$ 200k em nov/2026: Ratchet em US$ 29,4k–32,7k, AI Trader em US$ 28,4k–31,5k e o plugin JetBrains em US$ 3,9k–6,2k. São estimativas da plataforma, não vendas." },
     { k: ["plugin", "jetbrains", "intellij", "commit", "claude", "marketplace"],
       en: "He published \"Ratchet Commit Message for Claude\" on the JetBrains Marketplace: an IntelliJ-platform plugin that writes commit messages with Claude from the IDE's commit dialog, splits big changesets into logical commits, and automates branch-off flows. It talks to the Claude Code CLI — no API key needed.",
       pt: "Ele publicou o \"Ratchet Commit Message for Claude\" no JetBrains Marketplace: plugin pra plataforma IntelliJ que escreve mensagens de commit com Claude direto do commit dialog, divide changesets grandes em commits lógicos e automatiza branch-off. Conversa com o CLI do Claude Code — sem precisar de API key." },
